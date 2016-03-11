@@ -16,9 +16,21 @@ public class GenerateTablePrefabsScript : MonoBehaviour
 
 	// Flag for activation
 	public bool Generate = false;
+	public bool Clean = false;
 
 	void Update()
 	{
+		if ( Generate || Clean )
+		{
+			foreach ( Transform trans in GetComponentsInChildren<Transform>() )
+			{
+				if ( trans && ( trans.gameObject != gameObject ) )
+				{
+					DestroyImmediate( trans.gameObject );
+				}
+			}
+			Clean = false;
+		}
 		if ( Prefab && Generate )
 		{
 			for ( float row = Rows.x; row < Rows.y; row++ )
@@ -26,6 +38,9 @@ public class GenerateTablePrefabsScript : MonoBehaviour
 				for ( float col = Columns.x; col < Columns.y; col++ )
 				{
 					Vector3 position = ( row * DistanceRow ) + ( col * DistanceCol );
+					{
+						position += transform.position;
+					}
 					Quaternion rotation = transform.rotation;
 					GameObject gobj = (GameObject) Instantiate( Prefab, position, rotation );
 					gobj.transform.SetParent( transform );
