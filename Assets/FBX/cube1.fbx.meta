@@ -13,6 +13,7 @@ ModelImporter:
     100010: Cube.004
     100012: Cube.005
     100014: Cube.047
+    100016: Cube.000
     400000: //RootNode
     400002: Cube
     400004: Cube.001
@@ -21,6 +22,7 @@ ModelImporter:
     400010: Cube.004
     400012: Cube.005
     400014: Cube.047
+    400016: Cube.000
     2300000: //RootNode
     2300002: Cube
     2300004: Cube.001
@@ -29,6 +31,7 @@ ModelImporter:
     2300010: Cube.004
     2300012: Cube.005
     2300014: Cube.047
+    2300016: Cube.000
     3300000: //RootNode
     3300002: Cube
     3300004: Cube.001
@@ -37,6 +40,7 @@ ModelImporter:
     3300010: Cube.004
     3300012: Cube.005
     3300014: Cube.047
+    3300016: Cube.000
     4300000: Cube.047
     4300002: Cube
     4300004: Cube.001
@@ -44,6 +48,7 @@ ModelImporter:
     4300008: Cube.003
     4300010: Cube.004
     4300012: Cube.005
+    4300014: Cube.000
   materials:
     importMaterials: 1
     materialName: 0
