@@ -66,5 +66,6 @@ public class GravityTriggerScript : MonoBehaviour
 			//ball.AddGravity( -Gravity );
 		}
 		Lerp = false;
+		Ball = null;
 	}
 }
