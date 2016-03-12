@@ -8,16 +8,25 @@ using System.Collections;
 public class GravityTriggerScript : MonoBehaviour
 {
 	public Vector3 Gravity = Vector3.zero;
-	public Vector3 Angle = Vector3.zero;
+	public Transform MazeUpward;
+
 	private bool Lerp = false;
+	private GameObject Ball;
 
 	void Update()
 	{
 		if ( Lerp )
 		{
-			Quaternion target = Quaternion.LookRotation( -transform.right, -Gravity );
-			transform.parent.parent.rotation = Quaternion.Lerp( transform.parent.parent.rotation, target, Time.deltaTime );
-			//transform.parent.parent.localEulerAngles = Vector3.Lerp( transform.parent.parent.localEulerAngles, Angle, Time.deltaTime * 10 );
+			Quaternion target = MazeUpward.rotation;
+			transform.parent.parent.rotation = Quaternion.Lerp( transform.parent.parent.rotation, target, Time.deltaTime * 5 );
+
+			// Resume when rotated
+			float dist = Quaternion.Angle( transform.parent.parent.rotation, target );
+			if ( dist < 10 )
+			{
+				Ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+				Ball.GetComponent<Rigidbody>().isKinematic = false;
+			}
 		}
 	}
 
@@ -33,7 +42,11 @@ public class GravityTriggerScript : MonoBehaviour
 
 		// Reorient maze
 		Lerp = true;
-    }
+		Ball = ball.gameObject;
+
+		// Pause while reorientating
+		Ball.GetComponent<Rigidbody>().isKinematic = true;
+	}
 
 	void OnTriggerExit( Collider collider )
 	{
@@ -42,6 +55,6 @@ public class GravityTriggerScript : MonoBehaviour
 		{
 			//ball.AddGravity( -Gravity );
 		}
-		Lerp = true;
+		Lerp = false;
 	}
 }

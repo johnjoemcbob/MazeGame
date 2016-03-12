@@ -20,6 +20,7 @@ public class SwipeScript : MonoBehaviour
 	public float DistanceThreshold = 1;
 
     private Vector2 PressedPos = Vector3.zero;
+	private float PressedTime = 0;
 
 	public virtual void Update()
 	{
@@ -38,12 +39,13 @@ public class SwipeScript : MonoBehaviour
 	void LogPress( Vector2 pos )
 	{
 		PressedPos = pos;
-	}
+		PressedTime = Time.time;
+    }
 
 	void CheckForSwipe( Vector2 pos )
 	{
 		Vector2 dif = pos - PressedPos;
-		float dist = Vector3.Distance( pos, PressedPos );
+		float dist = Vector3.Distance( pos, PressedPos ) / Mathf.Max( 1, Time.time - PressedTime );
 		if ( dist > DistanceThreshold )
 		{
 			// Horizontal right
