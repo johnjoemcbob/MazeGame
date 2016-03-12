@@ -56,7 +56,6 @@ public class GravityTriggerScript : MonoBehaviour
 		// Reorient maze
 		Lerp = true;
 		Ball = ball.gameObject;
-		print( gameObject.name );
 	}
 
 	void OnTriggerExit( Collider collider )
