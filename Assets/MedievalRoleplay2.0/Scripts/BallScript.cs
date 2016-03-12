@@ -7,11 +7,15 @@ using System.Collections;
 
 public class BallScript : MonoBehaviour
 {
+	public float GravityMultiplier = 9.8f;
+
 	private Vector3 Gravity = Vector3.zero;
 
 	void Update()
 	{
-		GetComponent<Rigidbody>().AddForce( Gravity );
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
+		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+		GetComponent<Rigidbody>().AddForce( Gravity * GravityMultiplier );
 	}
 
 	public void SetGravity( Vector3 gravity )

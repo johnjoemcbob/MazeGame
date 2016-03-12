@@ -8,6 +8,18 @@ using System.Collections;
 public class GravityTriggerScript : MonoBehaviour
 {
 	public Vector3 Gravity = Vector3.zero;
+	public Vector3 Angle = Vector3.zero;
+	private bool Lerp = false;
+
+	void Update()
+	{
+		if ( Lerp )
+		{
+			Quaternion target = Quaternion.LookRotation( -transform.right, -Gravity );
+			transform.parent.parent.rotation = Quaternion.Lerp( transform.parent.parent.rotation, target, Time.deltaTime );
+			//transform.parent.parent.localEulerAngles = Vector3.Lerp( transform.parent.parent.localEulerAngles, Angle, Time.deltaTime * 10 );
+		}
+	}
 
 	void OnTriggerEnter( Collider collider )
 	{
@@ -15,9 +27,13 @@ public class GravityTriggerScript : MonoBehaviour
 		if ( ball )
 		{
 			//ball.AddGravity( Gravity );
-			ball.SetGravity( Gravity );
+			//ball.SetGravity( Gravity );
+			ball.SetGravity( -Vector3.up );
 		}
-	}
+
+		// Reorient maze
+		Lerp = true;
+    }
 
 	void OnTriggerExit( Collider collider )
 	{
@@ -26,5 +42,6 @@ public class GravityTriggerScript : MonoBehaviour
 		{
 			//ball.AddGravity( -Gravity );
 		}
+		Lerp = true;
 	}
 }
