@@ -18,7 +18,6 @@ public class GravityTriggerScript : MonoBehaviour
 		if ( Lerp )
 		{
 			Quaternion target = MazeUpward.rotation;
-			transform.parent.parent.rotation = Quaternion.Lerp( transform.parent.parent.rotation, target, Time.deltaTime * 5 );
 
 			// Resume when rotated
 			float dist = Quaternion.Angle( transform.parent.parent.rotation, target );
@@ -26,7 +25,21 @@ public class GravityTriggerScript : MonoBehaviour
 			{
 				Ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
 				Ball.GetComponent<Rigidbody>().isKinematic = false;
+            }
+			else if ( dist < 1 )
+			{
+				Lerp = false;
 			}
+			else
+			{
+				// Pause while reorientating
+				Ball.GetComponent<Rigidbody>().isKinematic = true;
+
+				// Reset tilting while reorientating
+				transform.parent.parent.parent.GetComponent<MazeOrientScript>().Reset();
+			}
+
+			transform.parent.parent.rotation = Quaternion.Lerp( transform.parent.parent.rotation, target, Time.deltaTime * 5 );
 		}
 	}
 
@@ -43,9 +56,7 @@ public class GravityTriggerScript : MonoBehaviour
 		// Reorient maze
 		Lerp = true;
 		Ball = ball.gameObject;
-
-		// Pause while reorientating
-		Ball.GetComponent<Rigidbody>().isKinematic = true;
+		print( gameObject.name );
 	}
 
 	void OnTriggerExit( Collider collider )

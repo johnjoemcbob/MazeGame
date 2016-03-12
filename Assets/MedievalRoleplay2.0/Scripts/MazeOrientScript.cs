@@ -38,4 +38,10 @@ public class MazeOrientScript : MonoBehaviour
 		Quaternion target = Quaternion.Euler( TargetRotation );
 		transform.localRotation = Quaternion.Lerp( transform.localRotation, target, Time.deltaTime );
 	}
+
+	public void Reset()
+	{
+		TargetRotation = Vector3.zero;
+		transform.localRotation = Quaternion.Euler( TargetRotation );
+	}
 }
