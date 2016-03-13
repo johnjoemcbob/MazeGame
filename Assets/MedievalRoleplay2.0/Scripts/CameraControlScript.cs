@@ -47,6 +47,8 @@ public class CameraControlScript : SwipeScript
 			default:
 				break;
 		}
+
+		GetComponent<AudioSource>().Play();
     }
 
 	bool TurnDirection( float current, float target )
