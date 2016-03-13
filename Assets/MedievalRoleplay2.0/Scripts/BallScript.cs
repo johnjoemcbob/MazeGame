@@ -13,10 +13,18 @@ public class BallScript : MonoBehaviour
 
 	void Update()
 	{
-		GetComponent<Rigidbody>().velocity = Vector3.zero;
-		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-		GetComponent<Rigidbody>().AddForce( Gravity * GravityMultiplier );
-	}
+		Rigidbody body = GetComponent<Rigidbody>();
+		if ( !body ) return;
+
+		//body.velocity = Vector3.zero;
+		//body.angularVelocity = Vector3.zero;
+		body.AddForce( Gravity * GravityMultiplier );
+
+		// Update the rolling audio depending on the speed of movement
+		float speed = Mathf.Clamp( body.angularVelocity.magnitude / 10, 0, 1 );
+		GetComponent<AudioSource>().volume = speed;
+		GetComponent<AudioSource>().pitch = 0.85f + ( speed / 4 );
+    }
 
 	public void SetGravity( Vector3 gravity )
 	{
