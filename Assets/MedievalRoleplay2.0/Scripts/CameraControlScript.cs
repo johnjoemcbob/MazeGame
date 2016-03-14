@@ -41,7 +41,7 @@ public class CameraControlScript : SwipeScript
 				// While in 'overdrive' don't stop spinning until clicked/touched
 				if ( HorizontalRotateOverdrive )
 				{
-					dist = 300;
+					dist = 300 + ( 50 * Mathf.Min( 2, Swipes ) );
 				}
 			}
 			speed = dist * dir * LerpSpeed;
@@ -77,7 +77,14 @@ public class CameraControlScript : SwipeScript
 		}
 
 		// Play spin swoosh
-		GetComponent<AudioSource>().Play();
+		foreach ( AudioSource audio in GetComponents<AudioSource>() )
+		{
+			audio.Play();
+			if ( HorizontalRotateOverdrive )
+			{
+				break;
+			}
+		}
     }
 
 	void CheckCancelOverdrive( int dir )
@@ -93,6 +100,7 @@ public class CameraControlScript : SwipeScript
 				HorizontalRotateOverdrive = false;
 				HorizontalRotateOverdriveCancel = true;
 
+				// Return to closest angle
 				int[] Possible = new int[] { 0, 90, 180, 270, 360 };
 				float dist = 0;
 				int closest = -1;
@@ -113,6 +121,9 @@ public class CameraControlScript : SwipeScript
 				}
 				closest = Mathf.Max( 0, closest );
 				HorizontalRotateTarget = Possible[closest];
+
+				// Stop audio
+				transform.GetChild( 0 ).GetComponent<AudioLoopWithPauseScript>().enabled = false;
 			}
         }
 	}
@@ -131,6 +142,9 @@ public class CameraControlScript : SwipeScript
 		{
 			HorizontalRotateOverdrive = true;
 			Swipes = 0;
+
+			// Begin looping turn audio
+			transform.GetChild( 0 ).GetComponent<AudioLoopWithPauseScript>().enabled = true;
         }
 	}
 

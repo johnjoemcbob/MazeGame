@@ -22,7 +22,8 @@ public class BallScript : MonoBehaviour
 
 		// Update the rolling audio depending on the speed of movement
 		float speed = Mathf.Clamp( body.angularVelocity.magnitude / 10, 0, 1 );
-		GetComponent<AudioSource>().volume = speed;
+		float vol = GetComponent<AudioSource>().volume;
+		GetComponent<AudioSource>().volume = vol + ( ( speed - vol ) * Time.deltaTime * 10 );
 		GetComponent<AudioSource>().pitch = 0.85f + ( speed / 4 );
     }
 
