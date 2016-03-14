@@ -7,6 +7,8 @@ using System.Collections;
 
 public class MazeGravityScript : MonoBehaviour
 {
+	public Transform Default;
+
 	private Transform MazeUpward;
 	private GameObject Ball;
 

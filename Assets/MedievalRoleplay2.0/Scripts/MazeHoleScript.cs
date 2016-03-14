@@ -8,14 +8,14 @@ using System.Collections;
 public class MazeHoleScript : MonoBehaviour
 {
 	// Reference to the round logic script
-	public GameObject ScriptTemp;
+	public GameLogicScript Script;
 
 	void OnTriggerEnter( Collider other )
 	{
 		if ( other.gameObject.name == "Ball" )
 		{
 			// Send message to round logic about winning
-
+			Script.CompleteMaze();
 
 			// Play ball fall audio
 			GetComponent<AudioSource>().Play();

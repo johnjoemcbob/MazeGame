@@ -25,12 +25,12 @@ public class SwipeScript : MonoBehaviour
 	public virtual void Update()
 	{
 		// Pressed
-		if ( Input.GetMouseButtonDown( 0 ) )
+		if ( Input.GetMouseButtonDown( 1 ) )
 		{
 			LogPress( Input.mousePosition );
 		}
 		// Released
-		if ( Input.GetMouseButtonUp( 0 ) )
+		if ( Input.GetMouseButtonUp( 1 ) )
 		{
 			CheckForSwipe( Input.mousePosition );
         }
