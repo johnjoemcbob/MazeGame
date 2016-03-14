@@ -20,10 +20,12 @@ public class CameraControlScript : SwipeScript
 	// Direction to rotate yaw angle
 	private float HorizontalRotateDirection = 1;
 	// The flags to rotate constantly (when going into 'overdrive' and continuously spinning)
-	private bool HorizontalRotateOverdrive = false;
+	public bool HorizontalRotateOverdrive = false;
 	private bool HorizontalRotateOverdriveCancel = false;
+	// The time for which to continue in overdrive
+	private float HorizontalRotateOverdriveTime = 0;
 	// The number of swipes counting for overdrive
-	private int Swipes = 0;
+	public int Swipes = 0;
 
 	public override void Update()
 	{
@@ -53,6 +55,20 @@ public class CameraControlScript : SwipeScript
 		foreach ( Transform cam in Cameras )
 		{
 			cam.localPosition = Vector3.Lerp( cam.localPosition, new Vector3( 0, 0, -Mathf.Abs( speed ) * 0.016f ), Time.deltaTime * 10 );
+		}
+
+		// Update audio while in overdrive
+		if ( HorizontalRotateOverdrive )
+		{
+			float pitch = transform.GetChild( 1 ).GetComponent<AudioSource>().pitch;
+			float target = 0.5f + ( 0.1f * Mathf.Min( 2, Swipes ) );
+			//transform.GetChild( 1 ).GetComponent<AudioSource>().pitch = pitch + ( ( target - pitch ) * Time.deltaTime * 10 );
+
+			HorizontalRotateOverdriveTime = Mathf.Max( 0, HorizontalRotateOverdriveTime - Time.deltaTime );
+			if ( HorizontalRotateOverdriveTime == 0 )
+			{
+				CheckCancelOverdrive( 0 );
+			}
 		}
 	}
 
@@ -87,16 +103,18 @@ public class CameraControlScript : SwipeScript
 		}
     }
 
-	void CheckCancelOverdrive( int dir )
+	public void CheckCancelOverdrive( int dir )
 	{
 		if ( dir != HorizontalRotateDirection )
 		{
-			if ( !HorizontalRotateOverdrive )
+			if ( HorizontalRotateOverdrive )
 			{
-				Swipes = 0;
-			}
-			else
-			{
+				// dir = 0 is the flag to always cancel
+				if ( dir == 0 )
+				{
+					dir = (int) HorizontalRotateDirection;
+				}
+
 				HorizontalRotateOverdrive = false;
 				HorizontalRotateOverdriveCancel = true;
 
@@ -124,6 +142,7 @@ public class CameraControlScript : SwipeScript
 
 				// Stop audio
 				transform.GetChild( 0 ).GetComponent<AudioLoopWithPauseScript>().enabled = false;
+				transform.GetChild( 1 ).GetComponent<AudioSource>().Stop();
 			}
         }
 	}
@@ -132,19 +151,21 @@ public class CameraControlScript : SwipeScript
 	{
 		// Add to swipes
 		StartCoroutine( WaitAndRemoveSwipe( dir, 1 ) );
+		HorizontalRotateOverdriveTime += 2;
 
 		// Go into overdrive if overshot (player is spinning really fast)
 		if ( HorizontalRotateOverdriveCancel )
 		{
 			HorizontalRotateOverdriveCancel = false;
 		}
-		else if ( Swipes > 2 )
+		else if ( Swipes > 3 )
 		{
 			HorizontalRotateOverdrive = true;
 			Swipes = 0;
 
 			// Begin looping turn audio
 			transform.GetChild( 0 ).GetComponent<AudioLoopWithPauseScript>().enabled = true;
+			transform.GetChild( 1 ).GetComponent<AudioSource>().Play();
         }
 	}
 

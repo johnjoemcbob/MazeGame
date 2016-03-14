@@ -24,16 +24,32 @@ public class SwipeScript : MonoBehaviour
 
 	public virtual void Update()
 	{
-		// Pressed
-		if ( Input.GetMouseButtonDown( 1 ) )
+		if ( Application.platform == RuntimePlatform.Android )
 		{
-			LogPress( Input.mousePosition );
+			// Pressed
+			if ( Input.GetMouseButtonDown( 0 ) )
+			{
+				LogPress( Input.mousePosition );
+			}
+			// Released
+			if ( Input.GetMouseButtonUp( 0 ) )
+			{
+				CheckForSwipe( Input.mousePosition );
+			}
 		}
-		// Released
-		if ( Input.GetMouseButtonUp( 1 ) )
+		else
 		{
-			CheckForSwipe( Input.mousePosition );
-        }
+			// Pressed
+			if ( Input.GetMouseButtonDown( 1 ) )
+			{
+				LogPress( Input.mousePosition );
+			}
+			// Released
+			if ( Input.GetMouseButtonUp( 1 ) )
+			{
+				CheckForSwipe( Input.mousePosition );
+			}
+		}
     }
 
 	void LogPress( Vector2 pos )

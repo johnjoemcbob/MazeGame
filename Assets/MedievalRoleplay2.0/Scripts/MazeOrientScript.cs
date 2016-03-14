@@ -16,9 +16,6 @@ public class MazeOrientScript : MonoBehaviour
 	private Vector3 PressedPos = Vector3.zero;
 	private Vector3 TargetRotation = Vector3.zero;
 
-	// temp
-	private float ANBGLES = 0;
-
 	void Start()
 	{
 		if ( Application.platform == RuntimePlatform.Android )
@@ -30,19 +27,24 @@ public class MazeOrientScript : MonoBehaviour
 
 	void Update()
 	{
-		if ( ( PressedPos.x == 0 ) && ( PressedPos.y == 0 ) )
-		{
-			PressedPos.x = Input.gyro.gravity.x;
-			PressedPos.y = Input.gyro.gravity.y;
-			PressedPos.z = Input.gyro.gravity.y;
-		}
 		if ( Application.platform == RuntimePlatform.Android )
 		{
-			TargetRotation.z = ( PressedPos.x - Input.gyro.gravity.x ) * MoveMultiplier * MaxRotation;
-			TargetRotation.x = ( PressedPos.y - Input.gyro.gravity.y ) * MoveMultiplier * MaxRotation;
-			TargetRotation.x = ( PressedPos.z - Input.gyro.gravity.z ) * MoveMultiplier * MaxRotation;
-			GetTargetFromCamera();
-			GetComponentInChildren<Text>().text = string.Format( "{0}: {1} {2} {3}", ANBGLES, Input.gyro.gravity.x, Input.gyro.gravity.y, Input.gyro.gravity.z );
+			// Convert gyro to new angles
+			Vector3 gyro = Input.gyro.gravity;
+			{
+				gyro = CameraBuff.rotation * gyro;
+			}
+
+			if ( ( PressedPos.x == 0 ) && ( PressedPos.y == 0 ) )
+			{
+				PressedPos.x = gyro.x;
+				PressedPos.y = gyro.y;
+				PressedPos.z = gyro.z;
+			}
+
+			TargetRotation.z = ( PressedPos.x - gyro.x ) * MoveMultiplier * MaxRotation;
+			TargetRotation.x = ( PressedPos.y - gyro.y ) * MoveMultiplier * MaxRotation;
+			TargetRotation.x = ( PressedPos.z - gyro.z ) * MoveMultiplier * MaxRotation;
 		}
 		else
 		{
@@ -58,7 +60,7 @@ public class MazeOrientScript : MonoBehaviour
 				TargetRotation.z = ( ( PressedPos.x - Input.mousePosition.x ) / Screen.width * MoveMultiplier ) * MaxRotation;
 				TargetRotation.x = -( ( PressedPos.y - Input.mousePosition.y ) / Screen.height * MoveMultiplier ) * MaxRotation;
 
-				GetTargetFromCamera();
+				TargetRotation = CameraBuff.rotation * TargetRotation;
 			}
 			else
 			{
@@ -76,68 +78,6 @@ public class MazeOrientScript : MonoBehaviour
 	{
 		TargetRotation = Vector3.zero;
 		transform.localRotation = Quaternion.Euler( TargetRotation );
-	}
-
-	void GetTargetFromCamera()
-	{
-		int angle = 0;
-		{
-			float yaw = CameraBuff.localEulerAngles.y;
-			float[] possibleang = new float[] { 0, 90, 180, 270 };
-			float dist = -1;
-			for ( int ang = 0; ang < 4; ang++ )
-			{
-				float curdist = ShortDistance( yaw, possibleang[ang] );
-				if ( ( dist == -1 ) || ( curdist < dist ) )
-				{
-					angle = ang;
-					dist = curdist;
-				}
-			}
-		}
-		ANBGLES = angle;
-		if ( Application.platform == RuntimePlatform.Android )
-		{
-			Vector3 temp = TargetRotation;
-			switch ( angle )
-			{
-				case 0:
-					
-					break;
-				case 1:
-					break;
-				case 2:
-					TargetRotation.x *= -1;
-					TargetRotation.z *= -1;
-					break;
-				case 3:
-					TargetRotation.x *= -1;
-					TargetRotation.z *= -1;
-					break;
-				default:
-					break;
-			}
-		}
-		else
-		{
-			switch ( angle )
-			{
-				case 0:
-					break;
-				case 1:
-					break;
-				case 2:
-					TargetRotation.x *= -1;
-					TargetRotation.z *= -1;
-					break;
-				case 3:
-					TargetRotation.x *= -1;
-					TargetRotation.z *= -1;
-					break;
-				default:
-					break;
-			}
-		}
 	}
 
 	float ShortDistance( float current, float target )
