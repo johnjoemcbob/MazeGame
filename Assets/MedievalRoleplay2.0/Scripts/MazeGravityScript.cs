@@ -20,15 +20,20 @@ public class MazeGravityScript : MonoBehaviour
 
 		// Resume when rotated
 		float dist = Quaternion.Angle( transform.rotation, target );
-		if ( dist < 10 )
+		if ( dist < 1 )
 		{
-			Ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
-			Ball.GetComponent<Rigidbody>().isKinematic = false;
+		}
+		else if ( dist < 10 )
+		{
+			//Ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			//Ball.GetComponent<Rigidbody>().isKinematic = false;
+			Ball.GetComponent<Rigidbody>().velocity /= 5000 * Time.deltaTime;
 		}
 		else
 		{
 			// Pause while reorientating
-			Ball.GetComponent<Rigidbody>().isKinematic = true;
+			//Ball.GetComponent<Rigidbody>().isKinematic = true;
+			Ball.GetComponent<Rigidbody>().velocity /= 10000 * Time.deltaTime;
 
 			// Reset tilting while reorientating
 			transform.parent.GetComponent<MazeOrientScript>().Reset();

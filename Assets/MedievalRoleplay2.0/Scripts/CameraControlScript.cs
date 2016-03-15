@@ -81,13 +81,15 @@ public class CameraControlScript : SwipeScript
 				CheckCancelOverdrive( -1 );
 				HorizontalRotateDirection = -1;
 				CheckOverdrive( -1 );
+				GetComponents<AudioSource>()[0].pitch = 0.9f;
 				break;
 			case SwipeType.Right:
 				HorizontalRotateTarget += HorizontalRotateAngle;
 				CheckCancelOverdrive( 1 );
 				HorizontalRotateDirection = 1;
 				CheckOverdrive( 1 );
-				break;
+				GetComponents<AudioSource>()[0].pitch = 1.1f;
+                break;
 			default:
 				break;
 		}
@@ -96,7 +98,7 @@ public class CameraControlScript : SwipeScript
 		foreach ( AudioSource audio in GetComponents<AudioSource>() )
 		{
 			audio.Play();
-			if ( HorizontalRotateOverdrive )
+			//if ( HorizontalRotateOverdrive )
 			{
 				break;
 			}
@@ -165,7 +167,7 @@ public class CameraControlScript : SwipeScript
 
 			// Begin looping turn audio
 			transform.GetChild( 0 ).GetComponent<AudioLoopWithPauseScript>().enabled = true;
-			transform.GetChild( 1 ).GetComponent<AudioSource>().Play();
+			//transform.GetChild( 1 ).GetComponent<AudioSource>().Play();
         }
 	}
 
