@@ -9,16 +9,18 @@ using System.Collections;
 public class MazeOrientScript : MonoBehaviour
 {
 	public float MoveMultiplier = 10;
+	public float AndroidMultiplier = 10;
 	public float MaxRotation = 10;
 	public float ReturnMultiplier = 20;
 	public Transform CameraBuff;
+	public bool DEBUG_AndroidTesting = false;
 
 	private Vector3 PressedPos = Vector3.zero;
 	private Vector3 TargetRotation = Vector3.zero;
 
 	void Start()
 	{
-		if ( Application.platform == RuntimePlatform.Android )
+		if ( ( Application.platform == RuntimePlatform.Android ) || DEBUG_AndroidTesting )
 		{
 			Input.gyro.enabled = true;
 			Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -27,24 +29,24 @@ public class MazeOrientScript : MonoBehaviour
 
 	void Update()
 	{
-		if ( Application.platform == RuntimePlatform.Android )
+		if ( ( Application.platform == RuntimePlatform.Android ) || DEBUG_AndroidTesting )
 		{
 			// Convert gyro to new angles
 			Vector3 gyro = Input.gyro.gravity;
 			{
-				gyro = CameraBuff.rotation * gyro;
+				gyro.y *= -1;
 			}
 
 			if ( ( PressedPos.x == 0 ) && ( PressedPos.y == 0 ) )
 			{
 				PressedPos.x = gyro.x;
 				PressedPos.y = gyro.y;
-				PressedPos.z = gyro.z;
 			}
 
-			TargetRotation.z = ( PressedPos.x - gyro.x ) * MoveMultiplier * MaxRotation;
-			TargetRotation.x = ( PressedPos.y - gyro.y ) * MoveMultiplier * MaxRotation;
-			TargetRotation.x = ( PressedPos.z - gyro.z ) * MoveMultiplier * MaxRotation;
+			TargetRotation.z = ( PressedPos.x - gyro.x ) * MoveMultiplier * AndroidMultiplier * MaxRotation;
+			TargetRotation.x = ( PressedPos.y - gyro.y ) * MoveMultiplier * AndroidMultiplier * MaxRotation;
+
+			TargetRotation = CameraBuff.rotation * TargetRotation;
 		}
 		else
 		{

@@ -8,8 +8,17 @@ using System.Collections;
 public class BallScript : MonoBehaviour
 {
 	public float GravityMultiplier = 9.8f;
+	public float AndroidMultiplier = 10;
 
 	private Vector3 Gravity = Vector3.zero;
+
+	void Start()
+	{
+		if ( Application.platform == RuntimePlatform.Android )
+		{
+			AndroidMultiplier = 0;
+		}
+	}
 
 	void Update()
 	{

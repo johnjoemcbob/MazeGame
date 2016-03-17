@@ -18,13 +18,14 @@ public class SwipeScript : MonoBehaviour
 	[Header( "Swiper" )]
 	// Distance of input drag before considered a swipe
 	public float DistanceThreshold = 1;
+	public bool DEBUG_AndroidTesting = false;
 
     private Vector2 PressedPos = Vector3.zero;
 	private float PressedTime = 0;
 
 	public virtual void Update()
 	{
-		if ( Application.platform == RuntimePlatform.Android )
+		if ( ( Application.platform == RuntimePlatform.Android ) || DEBUG_AndroidTesting )
 		{
 			// Pressed
 			if ( Input.GetMouseButtonDown( 0 ) )
