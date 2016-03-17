@@ -54,7 +54,7 @@ public class GameLogicScript : MonoBehaviour
 		ScaleState = MazeScaleState.Out;
 
 		// START SPINNING
-		cam.HorizontalRotateOverdrive = true;
+		cam.HorizontalRotateOverdrive = false;
 		cam.Swipes = 3;
 
 		// Wait for a while then change
