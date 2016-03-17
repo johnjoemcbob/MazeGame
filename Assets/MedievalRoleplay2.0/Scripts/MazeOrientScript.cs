@@ -12,6 +12,7 @@ public class MazeOrientScript : MonoBehaviour
 	public float AndroidMultiplier = 10;
 	public float MaxRotation = 10;
 	public float ReturnMultiplier = 20;
+	public float LerpSpeed = 5;
 	public Transform CameraBuff;
 	public bool DEBUG_AndroidTesting = false;
 
@@ -35,12 +36,6 @@ public class MazeOrientScript : MonoBehaviour
 			Vector3 gyro = Input.gyro.gravity;
 			{
 				gyro.y *= -1;
-			}
-
-			if ( ( PressedPos.x == 0 ) && ( PressedPos.y == 0 ) )
-			{
-				PressedPos.x = gyro.x;
-				PressedPos.y = gyro.y;
 			}
 
 			TargetRotation.z = ( PressedPos.x - gyro.x ) * MoveMultiplier * AndroidMultiplier * MaxRotation;
@@ -73,7 +68,7 @@ public class MazeOrientScript : MonoBehaviour
 
 		// Lerp the rotation of the maze
 		Quaternion target = Quaternion.Euler( TargetRotation );
-		transform.localRotation = Quaternion.Lerp( transform.localRotation, target, Time.deltaTime );
+		transform.localRotation = Quaternion.Lerp( transform.localRotation, target, Time.deltaTime * LerpSpeed );
 	}
 
 	public void Reset()

@@ -14,9 +14,9 @@ public class BallScript : MonoBehaviour
 
 	void Start()
 	{
-		if ( Application.platform == RuntimePlatform.Android )
+		if ( Application.platform != RuntimePlatform.Android )
 		{
-			AndroidMultiplier = 0;
+			AndroidMultiplier = 1;
 		}
 	}
 
@@ -27,7 +27,7 @@ public class BallScript : MonoBehaviour
 
 		//body.velocity = Vector3.zero;
 		//body.angularVelocity = Vector3.zero;
-		body.AddForce( Gravity * GravityMultiplier * Time.deltaTime );
+		body.AddForce( Gravity * GravityMultiplier * AndroidMultiplier * Time.deltaTime );
 
 		// Update the rolling audio depending on the speed of movement
 		float speed = Mathf.Clamp( body.angularVelocity.magnitude / 10, 0, 1 );
